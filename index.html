@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
+  <script src="index.js"></script>
 
   <style>
     button {
@@ -69,21 +70,21 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="console_log_btn">Console Log</button>
+      <button id="console_error_btn">Console Error</button>
+      <button id="console_count_btn">Console Count</button>
+      <button id="console_warn_btn">Console Warn</button>
+      <button id="console_assert_btn">Console Assert</button>
+      <button id="console_clear_btn">Console Clear</button>
+      <button id="console_dir_btn">Console Dir</button>
+      <button id="console_dirxml_btn">Console dirxml</button>
+      <button id="console_group_start_btn">Console Group Start</button>
+      <button id="console_group_end_btn">Console Group End</button>
+      <button id="console_table_btn">Console Table</button>
+      <button id="console_time_start_btn">Start Timer</button>
+      <button id="console_time_end_btn">End Timer</button>
+      <button id="console_trace_btn">Console Trace</button>
+      <button id="global_error_btn">Trigger a Global Error</button>
     </section>
   </main>
 
@@ -95,13 +96,44 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        if (!firstNum) {
+          throw new PropertyNeededError("firstNum");
+        }
+
+        if (!secondNum) {
+          throw new PropertyNeededError("secondNum");
+        }
+
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch(err) {
+        if (err instanceof PropertyNeededError) {
+          alert(err);
+        } else {
+          alert("Inputs Must Be Valid Numbers!");
+        }
+        alert("Fixed by filling in valid examples");
+        document.getElementById('first-num').value = "1";
+        document.getElementById('second-num').value = "2";
+        firstNum = document.querySelector('#first-num').value;
+        secondNum = document.querySelector('#second-num').value;
+      } finally {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
     });
+
+    class PropertyNeededError extends Error {
+      constructor(property) {
+        super(property + " is Not Defined");
+        this.name = "PropertyNeededError";
+        this.property = property;
+      }
+    }
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    // Code for the buttons are in index.js
   </script>
 </body>
 
